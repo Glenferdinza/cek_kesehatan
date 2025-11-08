@@ -33,7 +33,7 @@ Admin panel memungkinkan petugas kesehatan untuk:
 User panel menampilkan:
 
 - Menerima data sensor secara realtime dari ESP32 (ID 1-8)
-- 
+
 - Menyimpan hasil pemeriksaan ke database
 
 - Monitor realtime semua parameter kesehatan
@@ -48,9 +48,10 @@ User panel menampilkan:
 
 - Mengelola data (CRUD operations) melalui halaman Data Management
 
+- Debug mode untuk simulasi sensor realtime
+
 ## Instalasi dan Running
 
-- Debug mode untuk simulasi sensor realtime
 
 Admin panel memungkinkan pengelolaan data kesehatan secara realtime:
 
@@ -95,8 +96,8 @@ Admin panel memungkinkan pengelolaan data kesehatan secara realtime:
 
 ## Instalasi dan Running
 
-- Data Management dengan fitur CRUD lengkap### Admin Panel
-- `server/`
+- Data Management dengan fitur CRUD lengkap### Admin Panel `server/`
+
 - Node.js Express backend
 
 ## Troubleshooting
