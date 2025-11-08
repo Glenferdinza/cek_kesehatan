@@ -2,6 +2,8 @@
 
 Website monitoring kesehatan realtime yang terintegrasi dengan ESP32 untuk mengukur berbagai parameter kesehatan seperti tinggi badan, sit and reach, detak jantung, kalori, usia tubuh, push up, kekuatan kaki & punggung, dan kekuatan genggaman tangan.
 
+## Sistem ini memiliki dua role: Admin dan User, dengan fitur manajemen data lengkap.
+
 ## Admin Panel
 
 Admin panel memungkinkan petugas kesehatan untuk:
@@ -9,10 +11,6 @@ Admin panel memungkinkan petugas kesehatan untuk:
 - Input data pasien (nama, umur, nomor telepon) secara manual dengan tombol Enter
 
 - Menerima data sensor secara realtime dari ESP32 (ID 1-8)
-  
-## Admin PanelWebsite monitoring kesehatan realtime untuk menampilkan data sensor dari ESP32/NodeMCU.
-
-- Sistem ini memiliki dua role: Admin dan User, dengan fitur manajemen data lengkap.
 
 - Menyimpan hasil pemeriksaan ke database
 
@@ -23,7 +21,9 @@ Admin panel memungkinkan petugas kesehatan untuk:
 - Debug mode untuk simulasi sensor realtimeAdmin panel memungkinkan petugas kesehatan untuk demo testing
 
 - Akses admin dilindungi dengan token yang berlaku selama 10 menit.
+
 - Untuk mendapatkan akses admin, buka halaman User dan ketik `accessadmin()` di browser console.
+
 - Input data pasien (nama, umur, nomor telepon) secara manual dengan tombol Enter
 
 ## User Panel
