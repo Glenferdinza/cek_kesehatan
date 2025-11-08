@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Data Management — Cek Kesehatan</title>
+  <link rel="stylesheet" href="/frontend/css/style.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8fafc; padding: 32px; min-height: 100vh; }
+    
+    .dm-container { max-width: 1700px; margin: 0 auto; }
+    
+    .dm-header { background: white; padding: 32px 36px; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }
+    .dm-header h1 { margin: 0 0 12px 0; font-size: 36px; font-weight: 700; color: #1e3a8a; letter-spacing: -0.5px; }
+    .dm-header a { color: #3b82f6; text-decoration: none; font-size: 16px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
+    .dm-header a:hover { color: #1e40af; gap: 8px; }
+    
+    .dm-actions { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+    .dm-actions button { 
+      padding: 16px 32px; 
+      border: none; 
+      border-radius: 12px; 
+      cursor: pointer; 
+      font-size: 16px; 
+      font-weight: 600; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+    }
+    .dm-actions .btn-primary { background: #3b82f6; color: white; }
+    .dm-actions .btn-danger { background: #ef4444; color: white; }
+    .dm-actions .btn-success { background: #10b981; color: white; }
+    .dm-actions button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .dm-actions button:active { transform: translateY(0); }
+    
+    .dm-table-wrap { 
+      background: white; 
+      border-radius: 16px; 
+      overflow-x: auto;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+      padding: 24px;
+    }
+    
+    .dm-table { width: 100%; border-collapse: collapse; min-width: 1400px; }
+    .dm-table thead { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); }
+    .dm-table th { 
+      padding: 20px 24px; 
+      text-align: left; 
+      font-weight: 700; 
+      color: white; 
+      text-transform: uppercase; 
+      font-size: 14px;
+      letter-spacing: 1px;
+      border-right: 1px solid rgba(255,255,255,0.15);
+      white-space: nowrap;
+    }
+    .dm-table th:last-child { border-right: none; }
+    
+    .dm-table tbody tr { border-bottom: 2px solid #e5e7eb; transition: all 0.2s; }
+    .dm-table tbody tr:hover { background: #eff6ff; }
+    .dm-table tbody tr:last-child { border-bottom: none; }
+    
+    .dm-table td { 
+      padding: 20px 24px; 
+      color: #1e293b; 
+      font-size: 16px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    
+    .dm-table .checkbox-col { width: 80px; text-align: center; }
+    .dm-table .checkbox-col input[type="checkbox"] { 
+      width: 22px; 
+      height: 22px; 
+      cursor: pointer;
+      accent-color: #3b82f6;
+    }
+    
+    .dm-table .actions-col { width: 220px; text-align: right; white-space: nowrap; padding-right: 24px; }
+    .dm-table .actions-col button { 
+      padding: 10px 20px; 
+      margin-left: 8px; 
+      border: none; 
+      border-radius: 8px; 
+      font-size: 14px; 
+      cursor: pointer; 
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .dm-table .btn-edit { background: #3b82f6; color: white; }
+    .dm-table .btn-delete { background: #ef4444; color: white; }
+    .dm-table .btn-edit:hover { background: #2563eb; transform: scale(1.05); }
+    .dm-table .btn-delete:hover { background: #dc2626; transform: scale(1.05); }
+    
+    .no-data { 
+      padding: 80px; 
+      text-align: center; 
+      color: #94a3b8; 
+      font-size: 18px;
+      font-weight: 500;
+    }
+    
+    /* Edit Modal */
+    .modal { 
+      display: none; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      right: 0; 
+      bottom: 0; 
+      background: rgba(0,0,0,0.6); 
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+    .modal.active { display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { 
+      background: white; 
+      border-radius: 16px; 
+      padding: 36px; 
+      max-width: 700px; 
+      width: 100%; 
+      max-height: 90vh; 
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal-content h2 { 
+      margin: 0 0 28px 0; 
+      font-size: 28px; 
+      font-weight: 700; 
+      color: #1e3a8a;
+      letter-spacing: -0.5px;
+    }
+    .modal-content label { display: block; margin-bottom: 20px; }
+    .modal-content label span { 
+      display: block; 
+      margin-bottom: 8px; 
+      font-size: 16px; 
+      font-weight: 600; 
+      color: #1e40af;
+    }
+    .modal-content label input { 
+      width: 100%; 
+      padding: 14px 16px; 
+      border: 2px solid #e5e7eb; 
+      border-radius: 10px; 
+      font-size: 16px;
+      font-weight: 500;
+      transition: border 0.2s;
+    }
+    .modal-content label input:focus { 
+      outline: none; 
+      border-color: #3b82f6; 
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+    }
+    .modal-actions { display: flex; gap: 14px; margin-top: 28px; }
+    .modal-actions button { 
+      flex: 1; 
+      padding: 16px; 
+      border: none; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      font-size: 17px; 
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .modal-actions button:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+  <div class="dm-container">
+    <div class="dm-header">
+      <h1>Data Management</h1>
+      <a href="/admin">← Kembali ke Admin Panel</a>
+    </div>
+
+    <div class="dm-actions">
+      <button class="btn-danger" id="deleteSelected">Hapus Dipilih</button>
+      <button class="btn-success" id="downloadSelected">Download Dipilih</button>
+      <button class="btn-success" id="downloadAll">Download Semua Data</button>
+    </div>
+
+    <div class="dm-table-wrap">
+      <table class="dm-table">
+        <thead>
+          <tr>
+            <th class="checkbox-col"><input type="checkbox" id="selectAll"></th>
+            <th>TIMESTAMP</th>
+            <th>NAMA</th>
+            <th>UMUR</th>
+            <th>NO. TELP</th>
+            <th>HEIGHT</th>
+            <th>SIT & REACH</th>
+            <th>HEART RATE</th>
+            <th>KALORI</th>
+            <th>BODY AGE</th>
+            <th>PUSH UP</th>
+            <th>LEG & BACK</th>
+            <th>HANDGRIP</th>
+            <th class="actions-col">AKSI</th>
+          </tr>
+        </thead>
+        <tbody id="recordsBody">
+          <tr><td colspan="14" class="no-data">Memuat data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <h2>Edit Data Peserta</h2>
+      <form id="editForm">
+        <input type="hidden" id="editId">
+        <label><span>Nama</span><input type="text" id="editName" required></label>
+        <label><span>Umur</span><input type="number" id="editAge" required></label>
+        <label><span>No. Telp</span><input type="text" id="editPhone" required></label>
+        <label><span>Height (cm)</span><input type="text" id="editHeight" required></label>
+        <label><span>Sit & Reach (cm)</span><input type="text" id="editSit" required></label>
+        <label><span>Heart Rate (bpm)</span><input type="text" id="editHr" required></label>
+        <label><span>Kalori (kcal)</span><input type="text" id="editCal" required></label>
+        <label><span>Body Age</span><input type="text" id="editBodyAge" required></label>
+        <label><span>Push Up</span><input type="text" id="editPush" required></label>
+        <label><span>Leg & Back (kg)</span><input type="text" id="editLeg" required></label>
+        <label><span>Handgrip (kg)</span><input type="text" id="editHandgrip" required></label>
+        <div class="modal-actions">
+          <button type="button" class="btn-danger" id="cancelEdit">Batal</button>
+          <button type="submit" class="btn-success">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/frontend/js/data-management.js"></script>
+</body>
+</html>

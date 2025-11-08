@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cek Kesehatan</title>
+  <link rel="stylesheet" href="/frontend/css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo-space">
+      <!-- space for logos -->
+      <div class="logos">
+        <div class="logo-slot">LOGO 1</div>
+        <div class="logo-slot">LOGO 2</div>
+        <div class="logo-slot">LOGO 3</div>
+      </div>
+    </div>
+    <div class="title">CEK KESEHATAN</div>
+  </header>
+
+  <main class="container">
+    <section class="display" style="width:100%;padding:18px">
+      <div class="grid">
+        <div class="card"><div class="label">Nama</div><div id="disp_name" class="value">-</div></div>
+        <div class="card"><div class="label">Umur</div><div id="disp_age" class="value">-</div></div>
+        <div class="card"><div class="label">No. Telp</div><div id="disp_phone" class="value">-</div></div>
+
+        <div class="card big"><div class="label">Tinggi Badan</div><div id="disp_height" class="value bigv">- cm</div></div>
+        <div class="card big"><div class="label">Sit and Reach</div><div id="disp_sit_and_reach" class="value bigv">- cm</div></div>
+        <div class="card big"><div class="label">Heart Rate (HR)</div><div id="disp_heart_rate" class="value bigv">- bpm</div></div>
+        <div class="card big"><div class="label">Kebutuhan Kalori</div><div id="disp_calories" class="value bigv">- kcal</div></div>
+
+        <div class="card"><div class="label">Body Age</div><div id="disp_body_age" class="value">-</div></div>
+        <div class="card"><div class="label">Push Up</div><div id="disp_push_up" class="value">- kali</div></div>
+        <div class="card"><div class="label">Leg & Back Dynamometer</div><div id="disp_leg_back" class="value">- kg</div></div>
+        <div class="card"><div class="label">Handgrip Dynamometer</div><div id="disp_handgrip" class="value">- kg</div></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/frontend/js/user.js"></script>
+</body>
+</html>

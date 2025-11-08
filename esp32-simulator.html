@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 Simulator - Cek Kesehatan</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f1f5f9; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    h1 { margin: 0 0 10px 0; font-size: 24px; color: #1e293b; }
+    .subtitle { color: #64748b; margin-bottom: 30px; }
+    .section { margin-bottom: 24px; padding: 20px; background: #f8fafc; border-radius: 8px; }
+    .section h3 { margin: 0 0 16px 0; font-size: 16px; color: #334155; }
+    .input-group { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+    .input-group label { flex: 0 0 200px; font-size: 14px; color: #475569; font-weight: 500; }
+    .input-group input { flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+    .input-group button { padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; }
+    .input-group button:hover { background: #2563eb; }
+    .btn-send-all { width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 600; margin-top: 20px; }
+    .btn-send-all:hover { background: #059669; }
+    .status { margin-top: 20px; padding: 12px; background: #e0f2fe; border-radius: 6px; color: #0369a1; font-size: 13px; }
+    .status.error { background: #fee2e2; color: #dc2626; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔧 ESP32 Simulator</h1>
+    <div class="subtitle">Simulasi pengiriman data sensor dari ESP32 ke server</div>
+
+    <div class="section">
+      <h3>Info Peserta</h3>
+      <div class="input-group">
+        <label>Nama:</label>
+        <input type="text" id="name" placeholder="John Doe">
+        <button onclick="sendField('name')">Kirim</button>
+      </div>
+      <div class="input-group">
+        <label>Umur:</label>
+        <input type="number" id="age" placeholder="25">
+        <button onclick="sendField('age')">Kirim</button>
+      </div>
+      <div class="input-group">
+        <label>No. Telepon:</label>
+        <input type="text" id="phone" placeholder="08123456789">
+        <button onclick="sendField('phone')">Kirim</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Sensor Data (ID 1-8)</h3>
+      <div class="input-group">
+        <label>1. Height (cm):</label>
+        <input type="text" id="sensor1" placeholder="170">
+        <button onclick="sendSensor(1)">Kirim</button>
+      </div>
+      <div class="input-group">
+        <label>2. Sit & Reach (cm):</label>
+        <input type="text" id="sensor2" placeholder="25">
+        <button onclick="sendSensor(2)">Kirim</button>
+      </div>
+      <div class="input-group">
+        <label>3. Heart Rate (bpm):</label>
+        <input type="text" id="sensor3" placeholder="75">
+        <button onclick="sendSensor(3)">Kirim</button>
+      </div>
+      <div class="input-group">
+        <label>4. Calories (kcal):</label>
+        <input type="text" id="sensor4" placeholder="2000">
+        <button onclick="sendSensor(4)">Kirim</button>
+      </div>
+      <div class="input-group">
+        <label>5. Body Age:</label>
+        <input type="text" id="sensor5" placeholder="23">
+        <button onclick="sendSensor(5)">Kirim</button>
+      </div>
+      <div class="input-group">
+        <label>6. Push Up (kali):</label>
+        <input type="text" id="sensor6" placeholder="30">
+        <button onclick="sendSensor(6)">Kirim</button>
+      </div>
+      <div class="input-group">
+        <label>7. Leg & Back (kg):</label>
+        <input type="text" id="sensor7" placeholder="120">
+        <button onclick="sendSensor(7)">Kirim</button>
+      </div>
+      <div class="input-group">
+        <label>8. Handgrip (kg):</label>
+        <input type="text" id="sensor8" placeholder="45">
+        <button onclick="sendSensor(8)">Kirim</button>
+      </div>
+    </div>
+
+    <button class="btn-send-all" onclick="sendAll()">📤 Kirim Semua Data Sekaligus</button>
+
+    <div id="status"></div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000';
+
+    async function sendField(field) {
+      const value = document.getElementById(field).value;
+      if (!value) {
+        showStatus('Isi data terlebih dahulu!', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/input`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ field, value })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showStatus(`✅ ${field} berhasil dikirim!`);
+        } else {
+          showStatus(`❌ Gagal: ${data.error}`, 'error');
+        }
+      } catch (err) {
+        showStatus(`❌ Error: ${err.message}`, 'error');
+      }
+    }
+
+    async function sendSensor(id) {
+      const value = document.getElementById(`sensor${id}`).value;
+      if (!value) {
+        showStatus('Isi data sensor terlebih dahulu!', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/input`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, value })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showStatus(`✅ Sensor ${id} berhasil dikirim!`);
+        } else {
+          showStatus(`❌ Gagal: ${data.error}`, 'error');
+        }
+      } catch (err) {
+        showStatus(`❌ Error: ${err.message}`, 'error');
+      }
+    }
+
+    async function sendAll() {
+      showStatus('⏳ Mengirim semua data...');
+      
+      // Send info fields
+      for (const field of ['name', 'age', 'phone']) {
+        const value = document.getElementById(field).value;
+        if (value) {
+          await fetch(`${API_BASE}/api/input`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ field, value })
+          });
+          await new Promise(r => setTimeout(r, 200)); // delay 200ms
+        }
+      }
+
+      // Send sensors 1-8
+      for (let id = 1; id <= 8; id++) {
+        const value = document.getElementById(`sensor${id}`).value;
+        if (value) {
+          await fetch(`${API_BASE}/api/input`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id, value })
+          });
+          await new Promise(r => setTimeout(r, 200)); // delay 200ms
+        }
+      }
+
+      showStatus('✅ Semua data berhasil dikirim!');
+    }
+
+    function showStatus(message, type = 'success') {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = 'status' + (type === 'error' ? ' error' : '');
+    }
+  </script>
+</body>
+</html>

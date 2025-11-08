@@ -1,0 +1,15 @@
+{
+  "name": "cek-kesehatan-server",
+  "version": "1.0.0",
+  "description": "Backend for Cek Kesehatan - accepts ESP32 data and serves SSE",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mysql2": "^3.5.2",
+    "uuid": "^9.0.0"
+  }
+}
