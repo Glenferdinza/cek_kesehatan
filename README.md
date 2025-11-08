@@ -53,9 +53,6 @@ Admin panel memungkinkan pengelolaan data kesehatan secara realtime:
    npm installAkses admin dilindungi dengan token yang berlaku selama 10 menit. Untuk mendapatkan akses admin, buka halaman User dan ketik `accessadmin()` di browser console.
 
    ```
-
-
-
 2. **Setup database MySQL**
 
    - Buka phpMyAdmin di Laragon## User Panel- Input data peserta (nama, umur, nomor telepon)
@@ -84,8 +81,6 @@ Admin panel memungkinkan pengelolaan data kesehatan secara realtime:
 
    ```- Tampilan yang clean dengan tema blue & white
 
-
-
 5. **Akses website**- 8 jenis pengukuran kesehatan secara simultan- Export data ke CSV dengan format custom
 
    - User Panel: `http://localhost:3000/user`
@@ -111,8 +106,6 @@ MIT License
    npm installAkses admin dilindungi dengan token yang expire dalam 10 menit. Untuk mengakses, buka console browser dan ketik `accessadmin()`.-  Input data peserta (nama, umur, nomor telepon) - **otomatis terisi**- `sql/schema.sql` - database schema
 
    ```
-
-
 
 2. **Setup database MySQL**
 
@@ -156,21 +149,17 @@ MIT License
 
 **Glenferdinza & Rafli**
 
-### User View- When all measurements are present, a historical record is saved. Admin can export CSV.
+### User View
 
-## License
+- When all measurements are present, a historical record is saved. Admin can export CSV.
 
 1. Install dependencies:
-
-MIT License
 
 ```bash- Display realtime data sensor
 
 npm install
 
 ```- Akses admin via browser console: `accessadmin()`Quick start (Windows, Laragon):
-
-
 
 2. Setup database MySQL di Laragon, kemudian jalankan script SQL:
 
@@ -190,8 +179,6 @@ password: 'your_mysql_password'
 
 ```- Hapus data (single/multiple)
 
-
-
 4. Jalankan server:-Download CSV (selected/all)2. Server
 
 ```bash
@@ -210,40 +197,11 @@ node server/index.js   - Open a terminal in `server/` and run:
 
 - Debug: `http://localhost:3000/debug`ESP32 mengirim data dengan **ID sensor 1-8**:npm install
 
-
-
 ## Created by$env:DB_HOST='localhost'
 
+Glenferdinza & Rafli
 
-
-Glenferdinza & Rafli| ID | Sensor | Satuan |$env:DB_USER='root'
-
-
-
-## License|----|--------|--------|$env:DB_PASS=''
-
-
-
-MIT License| 1  | Height | cm |$env:DB_NAME='cek_kesehatan'
-
-
-| 2  | Sit and Reach | cm |$env:PORT='3000'
-
-| 3  | Heart Rate | bpm |node index.js
-
-| 4  | Calories | kcal |```
-
-| 5  | Body Age | - |
-
-| 6  | Push Up | kali |3. Frontend
-
-| 7  | Leg & Back Dynamometer | kg |   - Serve `frontend/` folder with any static server or open `frontend/index.html` directly.
-
-| 8  | Handgrip Dynamometer | kg |   - Admin page is the default UI. The top-left form is admin-only to start a session.
-
-
-
-## InstalasiESP32 integration (summary)
+## Instalasi ESP32 integration (summary)
 
 - Start a session by calling `/api/start_session` (POST JSON: {name, age, phone}). This returns `session_id`.
 
