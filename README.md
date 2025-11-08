@@ -4,6 +4,8 @@ Website monitoring kesehatan realtime yang terintegrasi dengan ESP32 untuk mengu
 
 ## Sistem ini memiliki dua role: Admin dan User, dengan fitur manajemen data lengkap.
 
+Untuk penjelasan terkait keduanya antara lain sebagai berikut:
+
 ## Admin Panel
 
 Admin panel memungkinkan petugas kesehatan untuk:
