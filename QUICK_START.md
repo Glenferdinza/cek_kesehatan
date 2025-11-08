@@ -1,6 +1,10 @@
 # QUICK START GUIDE
 
-## Server sudah berjalan di port 3000!
+**Pastikan Server Mysql entah lewat Laragon atau Mysql sudah kamu buat terlebih dahulu, lanjut nanti kamu buat databasenya dengan klik Link ini:**
+
+[Link schema.sql](https://github.com/Glenferdinza/cek_kesehatan/blob/main/sql/schema.sql)
+
+Copy paste langsung aja di SQL nya untuk membuat databasenya (ingat ya ini di copy-paste diluar database (soalnya udah include create databasenya))
 
 ### Buka Browser:
 
@@ -144,7 +148,5 @@ taskkill /PID <PID> /F
 - **Admin Access** = Bisa via console `accessadmin()` dari user page
 
 ---
-
-**SELAMAT! Website sudah siap digunakan!**
 
 Untuk integrasi ESP32 yang sebenarnya, lihat contoh code di README.md
