@@ -4,6 +4,7 @@ const fields = {
   name: document.getElementById('disp_name'),
   age: document.getElementById('disp_age'),
   phone: document.getElementById('disp_phone'),
+  gender: document.getElementById('disp_gender'),
   height: document.getElementById('disp_height'),
   sit_and_reach: document.getElementById('disp_sit_and_reach'),
   heart_rate: document.getElementById('disp_heart_rate'),
@@ -55,7 +56,7 @@ function connectSSE(){
 function updateField(key, value) {
   if (!fields[key]) return;
   
-  if (key === 'name' || key === 'age' || key === 'phone') {
+  if (key === 'name' || key === 'age' || key === 'phone' || key === 'gender') {
     fields[key].textContent = value || '-';
   } else if (key === 'height' || key === 'sit_and_reach') {
     fields[key].textContent = value ? value + ' cm' : '- cm';

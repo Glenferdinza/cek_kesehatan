@@ -18,6 +18,7 @@ let currentData = {
   name: null,
   age: null,
   phone: null,
+  gender: null,
   height: null,
   sit_and_reach: null,
   heart_rate: null,
@@ -50,7 +51,8 @@ const SENSOR_MAP = {
 const INFO_MAP = {
   name: 'name',
   age: 'age',
-  phone: 'phone'
+  phone: 'phone',
+  gender: 'gender'
 };
 
 // helper to broadcast updates to SSE clients
@@ -96,13 +98,14 @@ async function saveToDatabase() {
     const id = uuidv4();
     const timestamp = getGMT7Timestamp();
     await pool.query(
-      `INSERT INTO records (session_id, name, age, phone, height, sit_and_reach, heart_rate, calories, body_age, push_up, leg_back, handgrip, saved_at) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO records (session_id, name, age, phone, gender, height, sit_and_reach, heart_rate, calories, body_age, push_up, leg_back, handgrip, saved_at) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         id,
         currentData.name || '',
         currentData.age || null,
         currentData.phone || '',
+        currentData.gender || '',
         currentData.height || '',
         currentData.sit_and_reach || '',
         currentData.heart_rate || '',
@@ -147,10 +150,10 @@ app.get('/api/export', async (req, res) => {
   const filename = `${name.replace(/\s+/g, '_')}_Cek-Kesehatan.csv`;
   
   const [rows] = await pool.query('SELECT * FROM records ORDER BY saved_at DESC');
-  const headers = ['Nama','Umur','Nomor Telepon','Tinggi Badan','Sit and Reach','Heart Rate','Kebutuhan Kalori','Body Age','Push Up','Leg and Back Dynamometer','Handgrip Dynamometer','Timestamp'];
+  const headers = ['Nama','Umur','Nomor Telepon','Jenis Kelamin','Tinggi Badan','Sit and Reach','Heart Rate','Kebutuhan Kalori','Body Age','Push Up','Leg and Back Dynamometer','Handgrip Dynamometer','Timestamp'];
   const csvRows = [headers.join(',')];
   rows.forEach(r => {
-    const cols = [r.name, r.age, r.phone, r.height, r.sit_and_reach, r.heart_rate, r.calories, r.body_age, r.push_up, r.leg_back, r.handgrip, r.saved_at];
+    const cols = [r.name, r.age, r.phone, r.gender, r.height, r.sit_and_reach, r.heart_rate, r.calories, r.body_age, r.push_up, r.leg_back, r.handgrip, r.saved_at];
     const esc = cols.map(c => `"${String(c).replace(/"/g,'""')}"`);
     csvRows.push(esc.join(','));
   });
@@ -173,11 +176,11 @@ app.delete('/api/records/:id', async (req, res) => {
 
 // Update record
 app.put('/api/records/:id', async (req, res) => {
-  const { name, age, phone, height, sit_and_reach, heart_rate, calories, body_age, push_up, leg_back, handgrip } = req.body;
+  const { name, age, phone, gender, height, sit_and_reach, heart_rate, calories, body_age, push_up, leg_back, handgrip } = req.body;
   try {
     await pool.query(
-      `UPDATE records SET name=?, age=?, phone=?, height=?, sit_and_reach=?, heart_rate=?, calories=?, body_age=?, push_up=?, leg_back=?, handgrip=? WHERE session_id=?`,
-      [name, age, phone, height, sit_and_reach, heart_rate, calories, body_age, push_up, leg_back, handgrip, req.params.id]
+      `UPDATE records SET name=?, age=?, phone=?, gender=?, height=?, sit_and_reach=?, heart_rate=?, calories=?, body_age=?, push_up=?, leg_back=?, handgrip=? WHERE session_id=?`,
+      [name, age, phone, gender, height, sit_and_reach, heart_rate, calories, body_age, push_up, leg_back, handgrip, req.params.id]
     );
     return res.json({ ok: true });
   } catch (err) {

@@ -44,6 +44,7 @@ const fields = {
   name: document.getElementById('disp_name'),
   age: document.getElementById('disp_age'),
   phone: document.getElementById('disp_phone'),
+  gender: document.getElementById('disp_gender'),
   height: document.getElementById('disp_height'),
   sit_and_reach: document.getElementById('disp_sit_and_reach'),
   heart_rate: document.getElementById('disp_heart_rate'),
@@ -57,7 +58,8 @@ const fields = {
 const inputFields = {
   name: document.getElementById('name'),
   age: document.getElementById('age'),
-  phone: document.getElementById('phone')
+  phone: document.getElementById('phone'),
+  gender: document.getElementById('gender')
 };
 
 // Manual input with Enter key - send to server
@@ -98,6 +100,20 @@ inputFields.phone.addEventListener('keypress', async (e) => {
       });
     }
   }
+});
+
+// Radio button untuk Jenis Kelamin
+const genderRadios = document.querySelectorAll('input[name="gender"]');
+genderRadios.forEach(radio => {
+  radio.addEventListener('change', async (e) => {
+    const value = e.target.value;
+    inputFields.gender.value = value;
+    await fetch(`${API_BASE}/api/input`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ field: 'gender', value })
+    });
+  });
 });
 
 // Save button - save current data to database
@@ -146,6 +162,8 @@ function connectSSE(){
         inputFields.name.value = '';
         inputFields.age.value = '';
         inputFields.phone.value = '';
+        inputFields.gender.value = '';
+        genderRadios.forEach(r => r.checked = false);
         return;
       }
       
@@ -169,6 +187,13 @@ function updateField(key, value) {
   } else if (key === 'phone') {
     fields.phone.textContent = value || '-';
     inputFields.phone.value = value || '';
+  } else if (key === 'gender') {
+    fields.gender.textContent = value || '-';
+    inputFields.gender.value = value || '';
+    // Update radio button selection
+    genderRadios.forEach(r => {
+      r.checked = (r.value === value);
+    });
   } else if (key === 'height') {
     fields.height.textContent = value ? value + ' cm' : '- cm';
   } else if (key === 'sit_and_reach') {

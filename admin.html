@@ -11,10 +11,10 @@
   <header class="topbar">
     <div class="logo-space">
       <div class="logos">
-        <div class="logo-slot">LOGO 1</div>
-        <div class="logo-slot">LOGO 2</div>
-        <div class="logo-slot">LOGO 3</div>
-        <div class="logo-slot">LOGO 4</div>
+        <img src="/frontend/img/logo-uny.png" alt="Logo UNY" class="logo-img">
+        <img src="/frontend/img/" alt="Logo 2" class="logo-img">
+        <img src="/frontend/img/" alt="Logo 3" class="logo-img">
+        <img src="/frontend/img/" alt="Logo 4" class="logo-img">
       </div>
     </div>
     <div class="title">CEK KESEHATAN — ADMIN</div>
@@ -25,11 +25,20 @@
   <main class="container">
     <aside class="admin-panel" id="adminPanel">
       <button id="closeSidebar" class="close-sidebar-btn">‹</button>
-      <h3 style="margin-bottom:12px;font-size:16px;font-weight:600;color:#1e293b;">Info Peserta</h3>
+      <h3 style="margin-bottom:8px;font-size:14px;font-weight:600;color:#1e293b;">Info Peserta</h3>
       <label>Nama:<input id="name" placeholder="Ketik nama, tekan Enter"></label>
       <label>Umur:<input id="age" type="number" placeholder="Ketik umur, tekan Enter"></label>
       <label>Nomor Telepon:<input id="phone" placeholder="Ketik nomor, tekan Enter"></label>
-      <div class="buttons" style="margin-top:16px;">
+      <label>Jenis Kelamin:<input id="gender" placeholder="Pilih jenis kelamin" readonly></label>
+      <div style="margin-top:4px;margin-bottom:4px;">
+        <label style="display:inline-flex;align-items:center;margin-right:12px;cursor:pointer;font-size:12px;">
+          <input type="radio" name="gender" value="Laki-laki" style="margin-right:4px;cursor:pointer;"> Laki-laki
+        </label>
+        <label style="display:inline-flex;align-items:center;cursor:pointer;font-size:12px;">
+          <input type="radio" name="gender" value="Perempuan" style="margin-right:4px;cursor:pointer;"> Perempuan
+        </label>
+      </div>
+      <div class="buttons" style="margin-top:10px;">
         <button id="saveBtn" type="button">Simpan Data</button>
         <button id="exportBtn" type="button">Export CSV</button>
       </div>
@@ -51,7 +60,7 @@
           <div class="card"><div class="label">Handgrip Dynamometer</div><div id="disp_handgrip" class="value">- kg</div></div>
         </div>
 
-        <!-- Info Cards (3 cards below) -->
+        <!-- Info Cards (4 cards below in 2x2 grid) -->
         <div class="info-grid">
           <div class="info-card">
             <div class="info-label">Nama:</div>
@@ -64,6 +73,10 @@
           <div class="info-card">
             <div class="info-label">Nomor Telpon:</div>
             <div id="disp_phone" class="info-value">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Jenis Kelamin:</div>
+            <div id="disp_gender" class="info-value">-</div>
           </div>
         </div>
       </div>
