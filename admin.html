@@ -20,8 +20,11 @@
     <div class="title">CEK KESEHATAN — ADMIN</div>
   </header>
 
+  <button id="toggleSidebar" class="toggle-sidebar-btn">›</button>
+
   <main class="container">
-    <aside class="admin-panel">
+    <aside class="admin-panel" id="adminPanel">
+      <button id="closeSidebar" class="close-sidebar-btn">‹</button>
       <h3 style="margin-bottom:12px;font-size:16px;font-weight:600;color:#1e293b;">Info Peserta</h3>
       <label>Nama:<input id="name" placeholder="Ketik nama, tekan Enter"></label>
       <label>Umur:<input id="age" type="number" placeholder="Ketik umur, tekan Enter"></label>
@@ -33,21 +36,36 @@
       <a id="dataMgmt" class="link" href="/data-management">Data Management</a>
     </aside>
 
-    <section class="display">
-      <div class="grid">
-        <div class="card"><div class="label">Nama</div><div id="disp_name" class="value">-</div></div>
-        <div class="card"><div class="label">Umur</div><div id="disp_age" class="value">-</div></div>
-        <div class="card"><div class="label">No. Telp</div><div id="disp_phone" class="value">-</div></div>
+    <section class="display" id="displaySection">
+      <div class="main-container">
+        <!-- Sensor Grid (8 cards only) -->
+        <div class="sensor-grid">
+          <div class="card big"><div class="label">Tinggi Badan</div><div id="disp_height" class="value bigv">- cm</div></div>
+          <div class="card big"><div class="label">Sit and Reach</div><div id="disp_sit_and_reach" class="value bigv">- cm</div></div>
+          <div class="card big"><div class="label">Heart Rate (HR)</div><div id="disp_heart_rate" class="value bigv">- bpm</div></div>
+          <div class="card big"><div class="label">Kebutuhan Kalori</div><div id="disp_calories" class="value bigv">- kcal</div></div>
 
-        <div class="card big"><div class="label">Tinggi Badan</div><div id="disp_height" class="value bigv">- cm</div></div>
-        <div class="card big"><div class="label">Sit and Reach</div><div id="disp_sit_and_reach" class="value bigv">- cm</div></div>
-        <div class="card big"><div class="label">Heart Rate (HR)</div><div id="disp_heart_rate" class="value bigv">- bpm</div></div>
-        <div class="card big"><div class="label">Kebutuhan Kalori</div><div id="disp_calories" class="value bigv">- kcal</div></div>
+          <div class="card"><div class="label">Body Age</div><div id="disp_body_age" class="value">-</div></div>
+          <div class="card"><div class="label">Push Up</div><div id="disp_push_up" class="value">- kali</div></div>
+          <div class="card"><div class="label">Leg & Back Dynamometer</div><div id="disp_leg_back" class="value">- kg</div></div>
+          <div class="card"><div class="label">Handgrip Dynamometer</div><div id="disp_handgrip" class="value">- kg</div></div>
+        </div>
 
-        <div class="card"><div class="label">Body Age</div><div id="disp_body_age" class="value">-</div></div>
-        <div class="card"><div class="label">Push Up</div><div id="disp_push_up" class="value">- kali</div></div>
-        <div class="card"><div class="label">Leg & Back Dynamometer</div><div id="disp_leg_back" class="value">- kg</div></div>
-        <div class="card"><div class="label">Handgrip Dynamometer</div><div id="disp_handgrip" class="value">- kg</div></div>
+        <!-- Info Cards (3 cards below) -->
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-label">Nama:</div>
+            <div id="disp_name" class="info-value">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Umur:</div>
+            <div id="disp_age" class="info-value">-</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Nomor Telpon:</div>
+            <div id="disp_phone" class="info-value">-</div>
+          </div>
+        </div>
       </div>
     </section>
   </main>

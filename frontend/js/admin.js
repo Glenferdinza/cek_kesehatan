@@ -1,5 +1,35 @@
 const API_BASE = 'http://localhost:3000';
 
+// Sidebar toggle logic
+const toggleBtn = document.getElementById('toggleSidebar');
+const closeBtn = document.getElementById('closeSidebar');
+const adminPanel = document.getElementById('adminPanel');
+const displaySection = document.getElementById('displaySection');
+
+// Initialize sidebar state from localStorage
+let sidebarHidden = localStorage.getItem('sidebarHidden') === 'true';
+if (sidebarHidden) {
+  adminPanel.classList.add('hidden');
+  displaySection.classList.add('expanded');
+  toggleBtn.classList.add('visible');
+}
+
+// Toggle button (open sidebar)
+toggleBtn.addEventListener('click', () => {
+  adminPanel.classList.remove('hidden');
+  displaySection.classList.remove('expanded');
+  toggleBtn.classList.remove('visible');
+  localStorage.setItem('sidebarHidden', 'false');
+});
+
+// Close button (close sidebar)
+closeBtn.addEventListener('click', () => {
+  adminPanel.classList.add('hidden');
+  displaySection.classList.add('expanded');
+  toggleBtn.classList.add('visible');
+  localStorage.setItem('sidebarHidden', 'true');
+});
+
 const fields = {
   name: document.getElementById('disp_name'),
   age: document.getElementById('disp_age'),
