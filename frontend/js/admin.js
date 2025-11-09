@@ -1,5 +1,15 @@
 const API_BASE = 'http://localhost:3000';
 
+// Get token from URL
+const urlParams = new URLSearchParams(window.location.search);
+const adminToken = urlParams.get('token');
+
+// Update Data Management link with token
+if (adminToken) {
+  const dataMgmtLink = document.getElementById('dataMgmt');
+  dataMgmtLink.href = `/data-management?token=${adminToken}`;
+}
+
 // Sidebar toggle logic
 const toggleBtn = document.getElementById('toggleSidebar');
 const closeBtn = document.getElementById('closeSidebar');
