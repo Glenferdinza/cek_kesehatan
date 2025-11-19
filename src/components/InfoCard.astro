@@ -1,0 +1,13 @@
+---
+interface Props {
+  id: string;
+  label: string;
+}
+
+const { id, label } = Astro.props;
+---
+
+<div class="info-card">
+  <div class="info-label">{label}:</div>
+  <div id={id} class="info-value">-</div>
+</div>

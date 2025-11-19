@@ -1,3 +1,21 @@
 node_modules/
 *.log
 /.env
+.env
+
+# Astro
+dist/
+.astro/
+
+# Setup guides (not needed in repo)
+ASTRO_SETUP.md
+MIGRATION_SUMMARY.md
+LAST_UPDATE.md
+QUICK_START.md
+QUICK_START_ASTRO.md
+nodemcu/CONNECTION_GUIDE.md
+nodemcu/README.md
+
+# NodeMCU Arduino files (configuration specific to user)
+nodemcu/**/*.ino
+*.ino

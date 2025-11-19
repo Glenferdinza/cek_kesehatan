@@ -1,0 +1,50 @@
+---
+---
+
+<button class="toggle-sidebar-btn" id="toggleSidebar">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</button>
+
+<aside class="admin-panel" id="adminPanel">
+  <button class="close-sidebar-btn" id="closeSidebar">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+
+  <h3>Admin Panel</h3>
+
+  <form id="info-form">
+    <label>Nama:</label>
+    <input type="text" id="name" placeholder="Masukkan nama" required />
+
+    <label>Umur:</label>
+    <input type="number" id="age" placeholder="Masukkan umur" min="1" required />
+
+    <label>Nomor Telpon:</label>
+    <input type="tel" id="phone" placeholder="08123456789" required />
+
+    <label>Jenis Kelamin:</label>
+    <input type="text" id="gender" readonly placeholder="Pilih jenis kelamin" style="margin-bottom: 8px;" />
+    <div class="radio-group">
+      <label class="radio-label">
+        <input type="radio" name="gender" value="Laki-laki" id="radio_male" />
+        <span>Laki-laki</span>
+      </label>
+      <label class="radio-label">
+        <input type="radio" name="gender" value="Perempuan" id="radio_female" />
+        <span>Perempuan</span>
+      </label>
+    </div>
+
+    <div class="buttons">
+      <button type="button" id="saveBtn">Simpan Data</button>
+      <button type="button" id="exportBtn">Export CSV</button>
+    </div>
+  </form>
+
+  <a href="/data-management" class="link" id="dataMgmt">Data Management</a>
+</aside>

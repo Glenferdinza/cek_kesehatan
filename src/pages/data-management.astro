@@ -1,0 +1,107 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Data Management - Cek Kesehatan">
+  <div class="dm-container">
+    <div class="dm-topbar">
+      <div class="dm-topbar-left">
+        <h1 class="dm-title">Data Management</h1>
+        <div class="dm-subtitle">Kelola data pemeriksaan kesehatan</div>
+      </div>
+      <div class="dm-topbar-right">
+        <button class="dm-btn dm-btn-danger" id="deleteSelectedBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Hapus Terpilih
+        </button>
+        <button class="dm-btn dm-btn-primary" id="downloadBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download CSV
+        </button>
+        <a href="/admin" class="dm-btn dm-btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Kembali
+        </a>
+      </div>
+    </div>
+
+    <div class="dm-control-bar">
+      <div class="dm-search-box">
+        <svg class="dm-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Cari berdasarkan nama, umur, atau telpon..." class="dm-search-input">
+      </div>
+      
+      <div class="dm-filter-group">
+        <label class="dm-filter-label">Filter Gender:</label>
+        <select id="genderFilter" class="dm-select">
+          <option value="">Semua</option>
+          <option value="Laki-laki">Laki-laki</option>
+          <option value="Perempuan">Perempuan</option>
+        </select>
+      </div>
+
+      <div class="dm-info">
+        <span id="totalRecords">0</span> data ditemukan
+      </div>
+    </div>
+
+    <div class="dm-table-wrapper">
+      <table class="dm-table" id="dataTable">
+        <thead>
+          <tr>
+            <th class="freeze-check">
+              <input type="checkbox" id="selectAll">
+            </th>
+            <th class="freeze-name">Nama</th>
+            <th>Umur</th>
+            <th>Gender</th>
+            <th>No Telp</th>
+            <th>Tinggi</th>
+            <th>Sit&Reach</th>
+            <th>HR</th>
+            <th>Kalori</th>
+            <th>Body Age</th>
+            <th>Push Up</th>
+            <th>Leg&Back</th>
+            <th>Handgrip</th>
+            <th>Waktu</th>
+            <th class="dm-actions-header">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td colspan="15" style="text-align:center; padding:40px;">
+              <div style="color:#9ca3af;">Memuat data...</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="dm-pagination" id="pagination"></div>
+  </div>
+
+  <div class="dm-alert-overlay" id="alertOverlay">
+    <div class="dm-alert-modal" id="alertModal">
+      <div class="dm-alert-icon" id="alertIcon"></div>
+      <h3 class="dm-alert-title" id="alertTitle"></h3>
+      <p class="dm-alert-message" id="alertMessage"></p>
+      <div class="dm-alert-actions" id="alertActions"></div>
+    </div>
+  </div>
+
+  <script is:inline src="/frontend/js/data-management.js"></script>
+</Layout>

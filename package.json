@@ -1,0 +1,21 @@
+{
+  "name": "cek-kesehatan",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "server": "node server/index.js",
+    "websocket": "node server/websocket-server.js"
+  },
+  "dependencies": {
+    "astro": "^4.0.0",
+    "mysql2": "^3.6.5"
+  },
+  "devDependencies": {
+    "@astrojs/node": "^8.0.0"
+  }
+}

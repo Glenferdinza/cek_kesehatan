@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Sidebar from '../components/Sidebar.astro';
+import SensorCard from '../components/SensorCard.astro';
+import InfoCard from '../components/InfoCard.astro';
+---
+
+<Layout title="Cek Kesehatan - Admin">
+  <Header />
+  
+  <main class="container">
+    <Sidebar />
+    
+    <section class="display" id="displaySection">
+      <div class="main-container">
+        <div class="sensor-grid">
+          <SensorCard id="disp_height" label="Tinggi Badan" unit="cm" big={true} />
+          <SensorCard id="disp_sit_and_reach" label="Sit and Reach" unit="cm" big={true} />
+          <SensorCard id="disp_heart_rate" label="Heart Rate (HR)" unit="bpm" big={true} />
+          <SensorCard id="disp_calories" label="Kebutuhan Kalori" unit="kcal" big={true} />
+          
+          <SensorCard id="disp_body_age" label="Body Age" unit="" big={false} />
+          <SensorCard id="disp_push_up" label="Push Up" unit="kali" big={false} />
+          <SensorCard id="disp_leg_back" label="Leg & Back Dynamometer" unit="kg" big={false} />
+          <SensorCard id="disp_handgrip" label="Handgrip Dynamometer" unit="kg" big={false} />
+        </div>
+
+        <div class="info-grid">
+          <InfoCard id="disp_name" label="Nama" />
+          <InfoCard id="disp_age" label="Umur" />
+          <InfoCard id="disp_phone" label="Nomor Telpon" />
+          <InfoCard id="disp_gender" label="Jenis Kelamin" />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script is:inline src="/frontend/js/admin.js"></script>
+  <script is:inline src="/frontend/js/websocket-client.js"></script>
+</Layout>

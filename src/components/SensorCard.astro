@@ -1,0 +1,15 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  unit: string;
+  big?: boolean;
+}
+
+const { id, label, unit, big = false } = Astro.props;
+---
+
+<div class={big ? "card big" : "card"}>
+  <div class="label">{label}</div>
+  <div id={id} class={big ? "value bigv" : "value"}>- {unit}</div>
+</div>

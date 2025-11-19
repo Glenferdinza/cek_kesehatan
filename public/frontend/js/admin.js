@@ -215,3 +215,15 @@ function updateField(key, value) {
 
 // Connect on load
 connectSSE();
+
+// Also connect WebSocket if available for real-time sensor data
+if (typeof sensorWS !== 'undefined') {
+  sensorWS.onData((data) => {
+    // Update display from WebSocket sensor data
+    Object.keys(data).forEach(key => {
+      if (key !== 'sensor_id' && key !== 'timestamp') {
+        updateField(key, data[key]);
+      }
+    });
+  });
+}
