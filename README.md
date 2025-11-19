@@ -52,60 +52,112 @@ User panel menampilkan:
 
 ## Instalasi dan Running
 
+### Prasyarat
+- Node.js (v14 atau lebih baru)
+- MySQL Server (melalui Laragon atau instalasi terpisah)
+- Git (opsional)
 
-Admin panel memungkinkan pengelolaan data kesehatan secara realtime:
+### Langkah-langkah Setup
 
-1. **Install dependencies**
-
+1. **Install dependencies root project (Astro)**
    ```bash
    npm install
    ```
-   
-2. **Setup database MySQL**
 
-   - Buka phpMyAdmin di Laragon## User Panel
-   - Input data peserta (nama, umur, nomor telepon)
-   
-   ## Fitur UtamaStructure
+2. **Install dependencies server**
+   ```bash
+   cd server
+   npm install
+   cd ..
+   ```
 
+3. **Setup database MySQL**
+   - Buka phpMyAdmin di Laragon (atau MySQL client lainnya)
    - Import file `sql/schema.sql`
-
    - Atau buat database manual dengan nama `cek_kesehatan`
 
-3. **Konfigurasi database**User panel menampilkan:
+4. **Konfigurasi database**
+   - Edit file `server/db.js` jika perlu
+   - Default configuration:
+     - host: `localhost`
+     - user: `root`
+     - password: `asya2105`
+     - database: `cek_kesehatan`
 
-   - Monitoring 8 sensor kesehatan secara realtime
+5. **Jalankan WebSocket Server**
+   
+   Buka terminal pertama:
+   ```bash
+   cd server
+   npm run websocket
+   ```
+   
+   WebSocket server akan berjalan di `ws://localhost:8080`
 
-   - Edit file `server/db.js` jika perlu (default: host=localhost, user=root, password=asya2105)
-
-   - Monitor realtime semua parameter kesehatan
-
-4. **Jalankan server**
-
+6. **Jalankan HTTP Server**
+   
+   Buka terminal kedua:
+   ```bash
+   cd server
+   npm start
+   ```
+   
+   Atau langsung dengan:
    ```bash
    node server/index.js
    ```
+   
+   HTTP server akan berjalan di `http://localhost:3000`
 
-6. **Akses website**- 8 jenis pengukuran kesehatan secara simultan- Export data ke CSV dengan format custom
+7. **Jalankan Astro Dev Server (Opsional)**
+   
+   Buka terminal ketiga (jika ingin menggunakan Astro):
+   ```bash
+   npm run dev
+   ```
 
-   - User Panel: `http://localhost:3000/user`
-
-   - Admin Panel: Ketik `accessadmin()` di console User Panel
-
+8. **Akses aplikasi**
+   - User Panel: `http://localhost:3000/` atau `http://localhost:3000/user`
+   - Admin Panel: Buka User Panel, lalu ketik `accessadmin()` di browser console
    - Debug Mode: `http://localhost:3000/debug`
+   - Data Management: `http://localhost:3000/data-management`
 
-## Instalasi dan Running
+### Menjalankan Keseluruhan Sistem
 
-- Data Management dengan fitur CRUD lengkap### Admin Panel `server/`
+**Terminal 1 - WebSocket Server:**
+```bash
+cd server
+npm run websocket
+```
 
-- Node.js Express backend
+**Terminal 2 - HTTP Server:**
+```bash
+cd server
+npm start
+```
+
+**Terminal 3 - Astro (Opsional):**
+```bash
+npm run dev
+```
 
 ## Troubleshooting
 
-### Port 3000 sudah digunakan
+### Port sudah digunakan
+
+**Port 3000 (HTTP Server):**
 ```powershell
 # Cek process yang menggunakan port 3000
 netstat -ano | findstr :3000
+
+# Kill process (ganti PID dengan hasil di atas)
+taskkill /PID <PID> /F
+```
+
+**Port 8080 (WebSocket Server):**
+```powershell
+# Cek process yang menggunakan port 8080
+netstat -ano | findstr :8080
 
 # Kill process (ganti PID dengan hasil di atas)
 taskkill /PID <PID> /F
@@ -118,11 +170,32 @@ Pastikan path di HTML menggunakan `/frontend/css/style.css` (dengan slash di dep
 - Cek Laragon MySQL sudah running
 - Cek password di `server/db.js` sesuai dengan MySQL Anda
 - Cek database `cek_kesehatan` sudah dibuat
+- Pastikan MySQL berjalan di port 3306 (default)
 
-### SSE tidak update
-- Buka browser console (F12) cek error
-- Pastikan server running
+### WebSocket tidak terkoneksi
+- Pastikan WebSocket server berjalan di port 8080
+- Buka browser console (F12) cek error koneksi
+- Pastikan tidak ada firewall yang memblokir port 8080
+- Cek apakah ESP32 sudah terhubung ke jaringan yang sama
+
+### Data sensor tidak update
+- Pastikan WebSocket server berjalan
+- Pastikan ESP32 sudah terkoneksi ke WebSocket server
+- Buka browser console (F12) cek log WebSocket
+- Restart WebSocket server jika perlu
 - Refresh halaman (Ctrl+F5)
+
+## Technology Stack
+
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
+- **Backend**: Node.js, Express.js
+- **WebSocket**: ws library untuk real-time communication
+- **Database**: MySQL
+- **Hardware**: ESP32/NodeMCU dengan berbagai sensor kesehatan
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Created by
 
