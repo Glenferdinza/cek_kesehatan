@@ -79,7 +79,7 @@ if (adminToken) {
 }
 
 // Search functionality
-document.getElementById('searchBox').addEventListener('input', (e) => {
+document.getElementById('searchInput').addEventListener('input', (e) => {
   const query = e.target.value.toLowerCase().trim();
   
   if (!query) {
@@ -98,101 +98,75 @@ document.getElementById('searchBox').addEventListener('input', (e) => {
   renderTable();
 });
 
+// Gender filter
+document.getElementById('genderFilter').addEventListener('change', (e) => {
+  const gender = e.target.value;
+  
+  if (!gender) {
+    filteredRecords = allRecords;
+  } else {
+    filteredRecords = allRecords.filter(rec => rec.gender === gender);
+  }
+  
+  renderTable();
+});
+
 // Update records count
 function updateRecordsCount() {
   const total = allRecords.length;
   const shown = filteredRecords.length;
-  const countEl = document.getElementById('recordsCount');
+  const countEl = document.getElementById('totalRecords');
   
-  if (total === 0) {
-    countEl.textContent = 'Belum ada data';
-  } else if (total === shown) {
-    countEl.textContent = `${total} data tersimpan`;
-  } else {
-    countEl.textContent = `${shown} dari ${total} data`;
+  if (countEl) {
+    countEl.textContent = total;
   }
 }
 
-// Menu dropdown toggle
-document.getElementById('menuBtn').addEventListener('click', (e) => {
-  e.stopPropagation();
-  const dropdown = document.getElementById('dropdownMenu');
-  dropdown.classList.toggle('show');
+// Download CSV button
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  if (allRecords.length === 0) {
+    showAlert(
+      'No Data',
+      'No data available to download',
+      'warning'
+    );
+    return;
+  }
+  
+  downloadCSV(allRecords, `Health_Data_Export_${new Date().toISOString().split('T')[0]}.csv`);
+  showAlert(
+    'Download Successful',
+    `${allRecords.length} records exported`,
+    'success'
+  );
 });
 
-// Close dropdown when clicking outside
-document.addEventListener('click', () => {
-  const dropdown = document.getElementById('dropdownMenu');
-  dropdown.classList.remove('show');
-});
-
-// Download selected
-document.getElementById('downloadSelected').addEventListener('click', () => {
-  const selected = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.dataset.id);
+// Delete selected button
+document.getElementById('deleteSelectedBtn').addEventListener('click', () => {
+  const selected = Array.from(document.querySelectorAll('.dm-checkbox:checked'))
+    .filter(cb => cb.id !== 'selectAll')
+    .map(cb => cb.dataset.id);
+    
   if (selected.length === 0) {
     showAlert(
-      'Tidak Ada Data Dipilih',
-      'Silakan pilih data terlebih dahulu dengan mencentang checkbox',
+      'No Selection',
+      'Please select records to delete',
       'warning'
     );
     return;
   }
-  
-  const selectedRecords = allRecords.filter(r => selected.includes(r.session_id));
-  downloadCSV(selectedRecords, `Selected_Data_${selected.length}_Items.csv`);
-  showAlert(
-    'Download Berhasil',
-    `${selected.length} data berhasil didownload`,
-    'success'
-  );
-});
-
-// Download all data
-document.getElementById('downloadAllBtn').addEventListener('click', () => {
-  if (allRecords.length === 0) {
-    showAlert(
-      'Tidak Ada Data',
-      'Belum ada data tersimpan untuk didownload',
-      'warning'
-    );
-    return;
-  }
-  
-  downloadCSV(allRecords, `All_Data_${allRecords.length}_Items.csv`);
-  document.getElementById('dropdownMenu').classList.remove('show');
-  showAlert(
-    'Download Berhasil',
-    `Semua data (${allRecords.length} items) berhasil didownload`,
-    'success'
-  );
-});
-
-// Delete all data
-document.getElementById('deleteAllBtn').addEventListener('click', () => {
-  if (allRecords.length === 0) {
-    showAlert(
-      'Tidak Ada Data',
-      'Belum ada data tersimpan untuk dihapus',
-      'warning'
-    );
-    return;
-  }
-  
-  const totalRecords = allRecords.length;
   
   showConfirm(
-    'Hapus Semua Data?',
-    `Anda akan menghapus SEMUA DATA (${totalRecords} items). Data yang dihapus tidak dapat dikembalikan. Apakah Anda yakin?`,
+    'Delete Selected Records?',
+    `You are about to delete ${selected.length} record(s). This action cannot be undone.`,
     async () => {
-      document.getElementById('dropdownMenu').classList.remove('show');
-      
-      for (const rec of allRecords) {
-        await fetch(`${API_BASE}/api/records/${rec.session_id}`, { method: 'DELETE' });
+      for (const id of selected) {
+        await fetch(`${API_BASE}/api/records/${id}`, { method: 'DELETE' });
       }
       
       showAlert(
-        'Berhasil Dihapus',
-        `Semua data (${totalRecords} items) berhasil dihapus`,
+        'Deleted Successfully',
+        `${selected.length} record(s) deleted`,
         'success'
       );
       loadRecords();
@@ -208,7 +182,8 @@ async function loadRecords() {
     const data = await res.json();
     allRecords = data.records || [];
     filteredRecords = allRecords;
-    document.getElementById('searchBox').value = ''; // Reset search
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = ''; // Reset search
     renderTable();
   } catch (err) {
     console.error(err);
@@ -270,12 +245,21 @@ function renderTable() {
     const formattedTime = formatTimestamp(rec.saved_at);
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td class="checkbox-col freeze-check"><input type="checkbox" class="row-checkbox" data-id="${rec.session_id}"></td>
-      <td class="freeze-name" title="${rec.name || '-'}">${rec.name || '-'}</td>
+      <td class="freeze-check"><input type="checkbox" class="dm-checkbox" data-id="${rec.session_id}"></td>
+      <td class="freeze-name" title="${rec.name || '-'}">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;">
+            ${(rec.name || '?').charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <div style="font-weight:500;color:#1e293b;">${rec.name || '-'}</div>
+            <div style="font-size:12px;color:#94a3b8;">${rec.phone || '-'}</div>
+          </div>
+        </div>
+      </td>
       <td>${rec.age || '-'}</td>
       <td>${rec.gender || '-'}</td>
-      <td title="${rec.phone || '-'}">${rec.phone || '-'}</td>
-      <td title="${formattedTime}">${formattedTime}</td>
+      <td>${rec.phone || '-'}</td>
       <td>${rec.height || '-'}</td>
       <td>${rec.sit_and_reach || '-'}</td>
       <td>${rec.heart_rate || '-'}</td>
@@ -284,13 +268,22 @@ function renderTable() {
       <td>${rec.push_up || '-'}</td>
       <td>${rec.leg_back || '-'}</td>
       <td>${rec.handgrip || '-'}</td>
-      <td class="actions-col">
-        <button class="btn-edit" onclick="editRecord('${rec.session_id}')" title="Edit">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </button>
-        <button class="btn-delete" onclick="deleteRecord('${rec.session_id}')" title="Hapus">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        </button>
+      <td title="${formattedTime}">${formattedTime}</td>
+      <td>
+        <div style="display:flex;gap:6px;justify-content:center;">
+          <button class="dm-action-btn" onclick="editRecord('${rec.session_id}')" title="Edit">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <button class="dm-action-btn dm-action-delete" onclick="deleteRecord('${rec.session_id}')" title="Delete">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
+        </div>
       </td>
     `;
     tbody.appendChild(tr);
@@ -301,7 +294,7 @@ function renderTable() {
 
 // Select all checkbox
 document.getElementById('selectAll').addEventListener('change', (e) => {
-  const checkboxes = document.querySelectorAll('.row-checkbox');
+  const checkboxes = document.querySelectorAll('.dm-checkbox:not(#selectAll)');
   checkboxes.forEach(cb => cb.checked = e.target.checked);
 });
 
@@ -437,3 +430,40 @@ document.getElementById('editForm').addEventListener('submit', async (e) => {
 
 // Load on page load
 loadRecords();
+
+// WebSocket connection for realtime updates
+let ws = null;
+function connectWebSocket() {
+  const hostname = window.location.hostname;
+  const wsUrl = `ws://${hostname}:3001`;
+  
+  ws = new WebSocket(wsUrl);
+  
+  ws.onopen = () => {
+    console.log('WebSocket connected for data management');
+  };
+  
+  ws.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data);
+      // When we receive 'data_saved' event, reload records
+      if (data.type === 'data_saved' || data.event === 'data_saved') {
+        console.log('New data saved, reloading records...');
+        loadRecords();
+      }
+    } catch (err) {
+      console.error('WebSocket message error:', err);
+    }
+  };
+  
+  ws.onerror = (error) => {
+    console.error('WebSocket error:', error);
+  };
+  
+  ws.onclose = () => {
+    console.log('WebSocket disconnected, reconnecting in 3s...');
+    setTimeout(connectWebSocket, 3000);
+  };
+}
+
+connectWebSocket();

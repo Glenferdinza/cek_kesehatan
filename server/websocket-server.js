@@ -33,6 +33,9 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 
 const wss = new WebSocket.Server({ server });
 
+// Store wss instance globally so index.js can access it
+global.websocketServer = wss;
+
 const webClients = new Set();
 let latestSensorData = null;
 

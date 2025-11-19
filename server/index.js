@@ -141,6 +141,30 @@ app.get('/api/records', async (req, res) => {
 // Save current session manually (admin button)
 app.post('/api/save', async (req, res) => {
   await saveToDatabase();
+  
+  // Broadcast to WebSocket clients that data was saved
+  const WebSocket = require('ws');
+  const wss = global.websocketServer;
+  if (wss) {
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ 
+          type: 'data_saved',
+          event: 'data_saved',
+          timestamp: new Date().toISOString()
+        }));
+      }
+    });
+  }
+  
+  return res.json({ ok: true });
+});
+
+// Reset current data (start new measurement)
+app.post('/api/reset', async (req, res) => {
+  // Clear current data
+  Object.keys(currentData).forEach(k => currentData[k] = null);
+  broadcast({ type: 'reset' });
   return res.json({ ok: true });
 });
 

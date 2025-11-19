@@ -36,6 +36,16 @@ import InfoCard from '../components/InfoCard.astro';
     </section>
   </main>
 
+  <!-- Custom Alert Modal -->
+  <div class="dm-alert-overlay" id="adminAlertOverlay">
+    <div class="dm-alert-modal">
+      <div class="dm-alert-icon" id="adminAlertIcon"></div>
+      <h3 class="dm-alert-title" id="adminAlertTitle"></h3>
+      <p class="dm-alert-message" id="adminAlertMessage"></p>
+      <div class="dm-alert-actions" id="adminAlertActions"></div>
+    </div>
+  </div>
+
   <script is:inline src="/frontend/js/admin.js"></script>
   <script is:inline src="/frontend/js/websocket-client.js"></script>
 </Layout>
