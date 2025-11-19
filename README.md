@@ -117,10 +117,18 @@ User panel menampilkan:
    ```
 
 8. **Akses aplikasi**
+   
+   **Via localhost:**
    - User Panel: `http://localhost:3000/` atau `http://localhost:3000/user`
    - Admin Panel: Buka User Panel, lalu ketik `accessadmin()` di browser console
    - Debug Mode: `http://localhost:3000/debug`
    - Data Management: `http://localhost:3000/data-management`
+   
+   **Via mDNS (network discovery):**
+   - Website: `http://cek-kesehatan.local:3000`
+   - WebSocket: `ws://cek-kesehatan-ws.local:3001`
+   
+   *Catatan: mDNS memungkinkan perangkat lain di jaringan yang sama (ESP32, smartphone, komputer lain) untuk menemukan dan mengakses aplikasi menggunakan nama domain `.local` tanpa perlu mengetahui IP address.*
 
 ### Menjalankan Keseluruhan Sistem
 
@@ -129,17 +137,34 @@ User panel menampilkan:
 cd server
 npm run websocket
 ```
+Server akan publish mDNS service sebagai `cek-kesehatan-ws.local`
 
 **Terminal 2 - HTTP Server:**
 ```bash
 cd server
 npm start
 ```
+Server akan publish mDNS service sebagai `cek-kesehatan.local`
 
 **Terminal 3 - Astro (Opsional):**
 ```bash
 npm run dev
 ```
+
+### mDNS (Multicast DNS)
+
+Aplikasi ini menggunakan mDNS untuk network discovery, memungkinkan perangkat di jaringan yang sama untuk menemukan dan mengakses aplikasi tanpa perlu IP address:
+
+- **HTTP Server**: `http://cek-kesehatan.local:3000`
+- **WebSocket Server**: `ws://cek-kesehatan-ws.local:3001`
+
+**Keuntungan mDNS:**
+- ESP32 dapat otomatis menemukan server tanpa hardcode IP address
+- Akses mudah dari perangkat lain di jaringan lokal
+- Tidak perlu konfigurasi ulang jika IP berubah
+- Mendukung Windows, macOS, Linux, dan ESP32
+
+**Catatan:** Pastikan semua perangkat terhubung ke jaringan WiFi yang sama.
 
 ## Troubleshooting
 

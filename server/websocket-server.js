@@ -2,13 +2,14 @@ const WebSocket = require('ws');
 const express = require('express');
 const cors = require('cors');
 const os = require('os');
+const { Bonjour } = require('bonjour-service');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 const PORT = 3001;
-const MDNS_NAME = 'cek-kesehatan';
+const MDNS_NAME = 'cek-kesehatan-ws';
 
 const server = app.listen(PORT, '0.0.0.0', () => {
   const networkInterfaces = os.networkInterfaces();
@@ -22,13 +23,27 @@ const server = app.listen(PORT, '0.0.0.0', () => {
     }
   }
   
-  console.log(`HTTP Server running on port ${PORT}`);
-  console.log(`Local access:`);
+  console.log(`✓ WebSocket Server running on port ${PORT}`);
+  console.log(`✓ Local access:`);
   addresses.forEach(addr => {
     console.log(`  http://${addr}:${PORT}`);
     console.log(`  ws://${addr}:${PORT}`);
   });
-  console.log(`\nmDNS: ${MDNS_NAME}.local:${PORT}`);
+  
+  // Publish mDNS service
+  const bonjour = new Bonjour();
+  bonjour.publish({
+    name: MDNS_NAME,
+    type: 'websocket',
+    port: PORT,
+    txt: {
+      service: 'Cek Kesehatan - WebSocket Server',
+      path: '/'
+    }
+  });
+  
+  console.log(`\n📡 mDNS service published as: ${MDNS_NAME}.local`);
+  console.log(`   WebSocket endpoint: ws://${MDNS_NAME}.local:${PORT}\n`);
 });
 
 const wss = new WebSocket.Server({ server });

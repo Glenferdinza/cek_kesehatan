@@ -3,12 +3,14 @@ const cors = require('cors');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const pool = require('./db');
+const { Bonjour } = require('bonjour-service');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
+const MDNS_NAME = 'cek-kesehatan';
 
 // serve frontend static assets (CSS/JS/images)
 app.use('/frontend', express.static(path.join(__dirname, '..', 'frontend')));
@@ -323,5 +325,21 @@ app.get('/debug', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log('Server running on port', PORT);
+  console.log(`✓ HTTP Server running on port ${PORT}`);
+  console.log(`✓ Access via: http://localhost:${PORT}`);
+  console.log(`✓ mDNS: http://${MDNS_NAME}.local:${PORT}`);
+  
+  // Publish mDNS service
+  const bonjour = new Bonjour();
+  bonjour.publish({
+    name: MDNS_NAME,
+    type: 'http',
+    port: PORT,
+    txt: {
+      service: 'Cek Kesehatan - Health Monitoring System'
+    }
+  });
+  
+  console.log(`\n📡 mDNS service published as: ${MDNS_NAME}.local`);
+  console.log(`   You can access the app using: http://${MDNS_NAME}.local:${PORT}\n`);
 });
