@@ -18,6 +18,7 @@ const INFO_FIELDS = ['name', 'age', 'phone', 'gender'];
 // Track filled sensors
 let filledSensors = new Set();
 let isDataSaved = false;
+let isResetting = false; // Flag to prevent auto-save during reset
 
 // Custom Alert System for Admin
 function showAdminAlert(title, message, type = 'success') {
@@ -228,6 +229,9 @@ const progressFill = document.getElementById('progressFill');
 
 // LocalStorage functions
 function saveToLocalStorage() {
+  // Don't save during reset process
+  if (isResetting) return;
+  
   const data = {
     name: inputFields.name.value,
     age: inputFields.age.value,
@@ -369,6 +373,9 @@ resetBtn.addEventListener('click', async ()=>{
     'Mulai Data Baru',
     'Data saat ini akan dihapus. Pastikan sudah disimpan jika diperlukan.',
     async () => {
+      // Set flag to prevent auto-save during reset
+      isResetting = true;
+      
       // Clear all fields
       Object.keys(fields).forEach(key => {
         fields[key].textContent = '-';
@@ -386,6 +393,9 @@ resetBtn.addEventListener('click', async ()=>{
       
       // Send reset to server
       await fetch(`${API_BASE}/api/reset`, { method: 'POST' });
+      
+      // Clear the flag after reset is complete
+      isResetting = false;
       
       showAdminAlert('Siap Untuk Data Baru!', 'Form telah direset dan siap untuk pemeriksaan berikutnya', 'success');
     },
